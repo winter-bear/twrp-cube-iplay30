@@ -1,0 +1,50 @@
+
+import /init.${ro.hardware}.usb.rc
+
+on boot
+    setprop sys.usb.config adb
+
+on fs
+    install_keyring
+
+on init
+    setprop sys.usb.configfs 1
+    setprop sys.usb.ffs.aio_compat 1
+
+on property:ro.crypto.type=file
+    start gatekeeper-1-0
+    start keymaster-4-0
+
+on property:twrp.apex.loaded=true
+   export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/apex/com.android.runtime.release.apex/lib64:/apex/com.google.android.media.swcodec.apex/lib64:/apex/com.android.media.swcodec.apex/lib64
+
+on property:sys.usb.config=fastboot
+   start servicemanager
+   start hwservicemanager
+   restart fastbootd
+ 
+service keystore_auth /system/bin/keystore_auth
+    oneshot
+    user system
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+# keystore is started and stopped on demand by TWRP
+service keystore /system/bin/keystore /tmp/misc/keystore
+    user root
+    group root drmrpc readproc
+    disabled
+    seclabel u:r:recovery:s0
+
+service gatekeeper-1-0 /vendor/bin/hw/android.hardware.gatekeeper@1.0-service
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+service keymaster-4-0 /vendor/bin/hw/android.hardware.keymaster@4.0-service
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0

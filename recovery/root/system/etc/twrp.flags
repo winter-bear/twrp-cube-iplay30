@@ -1,0 +1,28 @@
+# mount point           fstype  device                  device2                         flags
+
+# Dynamic partition
+/system_root		 ext4    /dev/block/mapper/system                                flags=backup=0;display="System"
+/system_image           emmc    /dev/block/mapper/system                                flags=backup=1;display="System Image"
+/vendor                 ext4    /dev/block/mapper/vendor                                flags=backup=0;display="Vendor"
+/vendor_image           emmc    /dev/block/mapper/vendor                                flags=backup=1;display="Vendor Image"
+/product                ext4    /dev/block/mapper/product                               flags=backup=0;display="Product"
+/product_image          emmc    /dev/block/mapper/product                               flags=backup=1;display="Product Image"
+
+
+# Common partition
+/dtbo                   emmc    /dev/block/platform/bootdevice/by-name/dtbo             flags=backup=1;display="Dtbo";flashimg=1
+/persist                ext4    /dev/block/platform/bootdevice/by-name/persist          flags=backup=0;display="Persist"
+/persist_image          emmc    /dev/block/platform/bootdevice/by-name/persist          flags=backup=1;display="Persist Image";flashimg=1
+/vbmet                  emmc    /dev/block/platform/bootdevice/by-name/vbmeta           flags=display="Vbmeta";backup=1;flashimg=1
+/vbmeta_system          emmc    /dev/block/platform/bootdevice/by-name/vbmeta_system    flags=backup=1;display="Vbmeta System";flashimg=1
+/vbmeta_vendor          emmc    /dev/block/platform/bootdevice/by-name/vbmeta_vendor    flags=backup=1;display="Vbmeta Vendor";flashimg=1
+
+/boot        emmc         /dev/block/platform/bootdevice/by-name/boot       flags=flashimg;backup=1
+/cache		ext4	/dev/block/platform/bootdevice/by-name/cache
+/recovery	emmc	/dev/block/platform/bootdevice/by-name/recovery					flags=flashimg;backup=1
+/data		ext4	/dev/block/platform/bootdevice/by-name/userdata					flags=fileencryption=aes-256-xts,reservedsize=128M
+
+
+# Removable storage
+/external_sd	auto	/dev/block/mmcblk1p1	/dev/block/mmcblk1				flags=fsflags=utf8;display="Micro SDcard";storage;wipeingui;removable
+/usb-otg	auto	/dev/block/sda1	/dev/block/sda						flags=display="USB-OTG";storage;wipeingui;removable
